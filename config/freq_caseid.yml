@@ -1,0 +1,40 @@
+project_name: 'hypotension_0805'
+log_base_path: '/hdd1/mjh319/saves'
+
+modification: normal_modificiation
+
+data_path : '/home/mjh319/workspace/numpy4/'
+print_option_1 : True 
+max_epoch : 2
+batch_size : 128
+num_workers: 0
+# # lr : 0.001
+lr : 0.005
+
+pred_lag_list :
+    - 300
+multi_list :
+#     - True
+    - False
+invasive_list : 
+    - True
+#     - False
+total_exp : 3 
+
+colum_ehr : ['age','height', 'weight', 'bmi']
+use_ehr : True 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

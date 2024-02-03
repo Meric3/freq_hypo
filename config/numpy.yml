@@ -1,0 +1,39 @@
+project_name: 'new_hypotension'
+# base_path: '/hdd1/mjh319/data/video/ms_tcn/'
+log_base_path: '/hdd1/mjh319/saves'
+
+#modification: 'fourier'
+# modification: 'weight_0109'
+# modification: 'AA'
+modification: normal_modificiation
+
+# load_dataset_method: 'weight'
+# task_target: hypo
+# data_path : '/home/mjh319/workspace/new_hypotension/processed/'
+# data_path : '/home/mjh319/workspace/new_hypotension/numpy/'
+data_path : '/home/mjh319/workspace/numpy2/'
+# data_path : '/home/mjh319/workspace/new_hypotension/numpy3/'
+print_option_1 : False
+# max_epoch : 50
+batch_size : 64
+num_workers: 0
+# # lr : 0.001
+# lr : 0.0005
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

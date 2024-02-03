@@ -1,0 +1,43 @@
+project_name: 'new_hypotension'
+
+log_base_path: '/hdd1/mjh319/saves'
+
+modification: normal_modificiation
+
+
+data_path : '/home/mjh319/workspace/numpy5/'
+print_option_1 : False
+max_epoch : 50
+batch_size : 512
+num_workers: 0
+lr : 0.005
+
+pred_lag_list :
+    - 300
+    - 600
+    - 900
+multi_list :
+    - True
+    - False
+invasive_list : 
+    - True
+    - False
+total_exp : 3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
