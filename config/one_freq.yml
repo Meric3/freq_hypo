@@ -1,4 +1,4 @@
-project_name: 'hypotension_0805'
+project_name: 'hypotension_0916_ehr_test'
 log_base_path: '/hdd1/mjh319/saves'
 
 modification: normal_modificiation
@@ -21,7 +21,7 @@ invasive_list :
 total_exp : 5
 
 colum_ehr : ['age','height', 'weight', 'bmi']
-use_ehr : False 
+use_ehr : True 
 
 
 
