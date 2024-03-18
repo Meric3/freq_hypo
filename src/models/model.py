@@ -158,3 +158,42 @@ class Nets(nn.Module):
             out = torch.cat([out,ehr], dim =1)
         out = self.fc(out)    
         return self.activation(out)
+    
+
+
+# http://202.30.23.33:9103/notebooks/home/mjh319/Untitled.ipynb
+class VAE(nn.Module):
+    def __init__(self, latent_dim):
+        super(VAE, self).__init__()
+        self.latent_dim = latent_dim
+        # 인코더 정의
+        self.encoder = nn.Sequential(
+            nn.Linear(784, 256),
+            nn.ReLU(),
+            nn.Linear(256, latent_dim * 2)  # 잠재 변수의 평균과 로그 분산
+        )
+
+        # 디코더 정의
+        self.decoder = nn.Sequential(
+            nn.Linear(latent_dim, 256),
+            nn.ReLU(),
+            nn.Linear(256, 784),
+            nn.Sigmoid()
+        )
+
+    def reparameterize(self, mu, logvar):
+        std = torch.exp(0.5*logvar)
+        eps = torch.randn_like(std)
+        return mu + eps*std
+
+    def forward(self, x):
+        # 인코더를 통해 평균과 로그 분산 계산
+        latent = self.encoder(x)
+        mu, logvar = latent[:, :self.latent_dim], latent[:, self.latent_dim:]
+        
+        # 잠재 공간에서 샘플링
+        z = self.reparameterize(mu, logvar)
+        
+        # 디코더로 복원
+        reconstructed = self.decoder(z)
+        return reconstructed, mu, logvar

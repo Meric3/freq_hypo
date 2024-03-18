@@ -1,0 +1,31 @@
+{
+    // IntelliSense를 사용하여 가능한 특성에 대해 알아보세요.
+    // 기존 특성에 대한 설명을 보려면 가리킵니다.
+    // 자세한 내용을 보려면 https://go.microsoft.com/fwlink/?linkid=830387을(를) 방문하세요.
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // (tor19py37)
+            "name": "train",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./src/train.py",
+            "console": "integratedTerminal",
+            "args":["--config", "./config/one_time.yml",
+            "--features", "ecg_time",
+            "--gpu", "1", "--exp", "time_ecg"
+            ]
+        },
+        {
+            "name": "trainnet",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./tools/train_net.py",
+            "console": "integratedTerminal",
+            "args":["--config-file", "projects/dino/configs/dino-resnet/dino_r50_4scale_12ep.py",
+            "--num-gpus", "1",
+            "--eval-only", "train.init_checkpoint=../dino_r50_4scale_12ep.pth"
+            ]
+        }
+    ]
+}
