@@ -17,6 +17,44 @@
             ]
         },
         {
+            // (tor19py37)
+            "name": "lstm",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./src/train.py",
+            "console": "integratedTerminal",
+            "args":["--config", "./config/lstm.yml",
+            "--features", "none", "--model", "lstm",
+            "--gpu", "1", "--exp", "lstm_time"
+            ]
+        },
+        {
+            // (tor19py37)
+            "name": "vae",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./src/train.py",
+            "console": "integratedTerminal",
+            "args":["--config", "./config/vae.yml",
+            "--features", "ecg_time", "--model", "vae",
+            "--train_method", "vae",
+            "--gpu", "1", "--exp", "vae"
+            ]
+        },
+        {
+            // (tor19py37)
+            "name": "usad",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./src/train.py",
+            "console": "integratedTerminal",
+            "args":["--config", "./config/vae.yml",
+            "--features", "ecg_time", "--model", "usad",
+            "--train_method", "usad",
+            "--gpu", "1", "--exp", "usad"
+            ]
+        },
+        {
             "name": "trainnet",
             "type": "debugpy",
             "request": "launch",
