@@ -1,10 +1,10 @@
-project_name: 'hypotension_0916_ehr_test'
+project_name: 'hypotension_aki_t'
 log_base_path: '/hdd1/mjh319/saves'
 
 modification: normal_modificiation
 
-data_path : '/home/mjh319/workspace/numpy4/'
-print_option_1 : True 
+data_path : '/hdd2/mjh319/data/aki/make/30/'
+print_option_1 : True
 max_epoch : 200
 batch_size : 128
 num_workers: 0

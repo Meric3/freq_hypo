@@ -156,7 +156,7 @@ for pred in opt['pred_lag_list']:
                                          .format(random_key, epoch, last_saved_epoch, tests,current_auc['test'],\
                                                  best_auc, current_loss['train'],current_loss['test'],current_loss['valid']))
 
-                                            
+                log.info(test_auc_by_best_valid_auc)                            
                 test_auc_by_best_valid_auc_list.append(test_auc_by_best_valid_auc)
 
                 

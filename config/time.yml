@@ -27,7 +27,7 @@ colum_ehr : ['age','height', 'weight', 'bmi']
 use_ehr : True 
 
 
-
+window : 3000
 
 
 

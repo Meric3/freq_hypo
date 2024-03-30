@@ -6,14 +6,38 @@
     "configurations": [
         {
             // (tor19py37)
+            "name": "window_10",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./src/train.py",
+            "console": "integratedTerminal",
+            "args":["--config", "./config/window/60.yml",
+            "--features", "none",
+            "--gpu", "1", "--exp", "time_window_60_"
+            ]
+        },
+        {
+            // (tor19py37)
+            "name": "window_10_freq",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "./src/train.py",
+            "console": "integratedTerminal",
+            "args":["--config", "./config/window/60_f.yml",
+            "--features", "all","--model", "comb",
+            "--gpu", "1", "--exp", "time_window_60_f"
+            ]
+        },
+        {
+            // (tor19py37)
             "name": "train",
             "type": "debugpy",
             "request": "launch",
             "program": "./src/train.py",
             "console": "integratedTerminal",
-            "args":["--config", "./config/one_time.yml",
-            "--features", "ecg_time",
-            "--gpu", "1", "--exp", "time_ecg"
+            "args":["--config", "./config/freq.yml",
+            "--features", "all","--model", "comb",
+            "--gpu", "1", "--exp", "freq"
             ]
         },
         {

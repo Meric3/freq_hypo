@@ -1,9 +1,9 @@
-project_name: 'hypotension_0916_ehr_test'
+project_name: 'hypotension_window_test_freq'
 log_base_path: '/hdd1/mjh319/saves'
 
 modification: normal_modificiation
 
-data_path : '/home/mjh319/workspace/numpy4/'
+data_path : '/hdd2/mjh319/data/hypotension/window_processed/50/'
 print_option_1 : True 
 max_epoch : 200
 batch_size : 128
@@ -13,20 +13,18 @@ lr : 0.005
 
 pred_lag_list :
     - 300
-    - 600
-    - 900
 multi_list :
     - True
     - False
 invasive_list : 
     - True
     - False
-total_exp : 5
+total_exp : 1
 
 colum_ehr : ['age','height', 'weight', 'bmi']
 use_ehr : True 
 
-window : 3000
+window : 5000
 
 
 

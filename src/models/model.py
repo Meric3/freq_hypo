@@ -11,11 +11,13 @@ from sklearn.metrics import roc_auc_score
   
     
 class Net(nn.Module):
-    def __init__(self, features, task, invasive, multi, check='none', out='none', ehr_dim = None,use_ehr = False):
+    def __init__(self, features, window , opt, task, invasive, multi, check='none', out='none', ehr_dim = None,use_ehr = False):
         super(Net, self).__init__()   
+        self.opt = opt 
         self.task, self.invasive, self.multi = task, invasive, multi
         self.out = out
         self.use_ehr = use_ehr
+        self.window = window
 
         if features == 'ecg_time' or features == 'co2_time' or features == 'ecg_freq' or features == 'co2_freq':
             self.inc = 1
@@ -23,8 +25,8 @@ class Net(nn.Module):
             self.inc = 4 if self.invasive == True else 3
         else:
             self.inc = 1
-        if check == "fourier":
-            self.inc = 2*self.inc
+        # if check == "fourier":
+        #     self.inc = 2*self.inc
             
         if use_ehr == False:
             self.ehr_dim = 0
@@ -86,9 +88,29 @@ class Net(nn.Module):
             nn.MaxPool1d(2,stride=2),
             nn.Dropout(0.3)
         )
-        
+        self.conv8 = nn.Sequential(
+            nn.Conv1d(32, 32, kernel_size=16, stride=1, padding=1),
+            nn.BatchNorm1d(32),
+            nn.ReLU(),
+            nn.MaxPool1d(2,stride=2),
+            nn.Dropout(0.3)
+        )
+        if self.window == 3000:
+            len_ = 320
+        elif self.window == 1000:
+            len_ = 64
+        elif self.window == 2000 and opt['model'] == '1d_cnn':
+            len_ = 124
+        elif self.window == 4000 and opt['model'] == '1d_cnn':
+            len_ = 64
+        elif self.window == 5000 and opt['model'] == '1d_cnn':
+            len_ = 192
+        elif self.window == 6000 and opt['model'] == '1d_cnn':
+            len_ = 320
+        else:
+            len_ = 320
         self.fc = nn.Sequential(
-            nn.Linear(320 + self.ehr_dim, 2),
+            nn.Linear(len_ + self.ehr_dim, 2),
             nn.Dropout(0.3)
         )
         
@@ -105,7 +127,10 @@ class Net(nn.Module):
         out = self.conv4(out)
         out = self.conv5(out)
         out = self.conv6(out)
-        out = self.conv7(out)
+        if self.window > 1001:
+            out = self.conv7(out)
+        if self.window > 3001:
+            out = self.conv8(out)
         
         out = out.view(x.shape[0], out.size(1) * out.size(2))
         if self.out != 'none':
@@ -120,7 +145,7 @@ class Net(nn.Module):
         
         return out
 class Net_freq(nn.Module):
-    def __init__(self, features, window , task, invasive, multi, check='none', out='none', ehr_dim = None, use_ehr = False):
+    def __init__(self, features, window ,opt, task, invasive, multi, check='none', out='none', ehr_dim = None, use_ehr = False):
         super(Net_freq, self).__init__()   
         self.task, self.invasive, self.multi = task, invasive, multi
         self.out = out
@@ -225,12 +250,13 @@ class Net_freq(nn.Module):
 class Nets(nn.Module):
     def __init__(self, features, window, opt, task, invasive, multi, check='none', ehr_dim = None, use_ehr = False):
         super(Nets, self).__init__()   
+        self.window = window
         self.task, self.invasive, self.multi = task, invasive, multi
 
-        self.time = Net( features = features, task = 'classification', invasive = opt['invasive'], 
-                        multi = opt['multi'], out= "comb")
-        self.freq = Net_freq( features = features, window = window, task = 'classification', 
-                             invasive = opt['invasive'], multi = opt['multi'], check = 'fourier', out= "comb")
+        self.time = Net( features = features, window = opt['window'], opt = opt, task = 'classification', invasive = opt['invasive'], 
+                        multi = opt['multi'],check="comb", out= "comb")
+        self.freq = Net( features = features, window = opt['window'], opt = opt, task = 'classification', 
+                             invasive = opt['invasive'], multi = opt['multi'], check = 'comb', out= "comb")
         self.use_ehr = use_ehr
         if features == 'ecg_time' or features == 'co2_time' or features == 'ecg_freq' or features == 'co2_freq':
             self.inc = 2
@@ -247,7 +273,18 @@ class Nets(nn.Module):
             self.ehr_dim = 0
         else:
             self.ehr_dim = ehr_dim
-            
+
+        if self.window == 1000:
+            # 132 -4 
+            self.out = 128
+        elif self.window == 2000:
+            self.out = 128
+        elif self.window == 4000:
+            self.out = 128
+        elif self.window == 5000:
+            self.out = 384
+        elif self.window == 6000:
+            self.out = 640           
         self.fc = nn.Sequential(
             nn.Linear(self.out + self.ehr_dim, 2),
             nn.Dropout(0.3)
@@ -256,14 +293,14 @@ class Nets(nn.Module):
         self.activation = nn.Sigmoid()
     
     def forward(self, x, ehr=None):
-#         import pdb; pdb.set_trace()
         x = x.view(x.shape[0], self.inc, -1)
         time = self.time(x[:,0:int(self.inc/2),:])
         freq = self.freq(x[:,int(self.inc/2):self.inc,:])
         out = torch.cat([time,freq], dim =1)
-#         import pdb; pdb.set_trace()
+
         if self.use_ehr ==True:
             out = torch.cat([out,ehr], dim =1)
+
         out = self.fc(out)    
         return self.activation(out)
     
