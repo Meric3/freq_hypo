@@ -29,7 +29,7 @@ def make_model(opt, device, **kwargs):
         model = VAE(latent_dim = 20, features = opt['features'],  window = 3000, opt = opt, task = 'classification',invasive = opt['invasive'],\
                      multi = opt['multi'], check = 'fourier',  ehr_dim= len(opt['colum_ehr']), use_ehr=opt['use_ehr'])
     elif opt['model'] == 'usad':
-        model = UsadModel(w_size = 3000, z_size= 512, features = opt['features'],  window = 3000, opt = opt, task = 'classification',invasive = opt['invasive'],\
+        model = UsadModel(w_size = 3000, z_size= 1024, features = opt['features'],  window = 3000, opt = opt, task = 'classification',invasive = opt['invasive'],\
                      multi = opt['multi'], check = 'fourier',  ehr_dim= len(opt['colum_ehr']), use_ehr=opt['use_ehr'])
 
     else:

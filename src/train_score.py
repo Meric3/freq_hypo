@@ -109,6 +109,7 @@ for pred in opt['pred_lag_list']:
                     tqdm_ = tqdm.tqdm(range(opt['max_epoch']))
                 else:
                     tqdm_ = range(opt['max_epoch'])
+                tqdm_ = range(1)
                 
                 for epoch in tqdm_:
                     if epoch == 0:
@@ -151,11 +152,13 @@ for pred in opt['pred_lag_list']:
                                    'input_stack':input_stack,
                                    'model':model}, save_path)
                     
-                    if opt['print_option_1'] == True:
-                        tqdm_.set_description("random_key[{}][e:{}][last:{}][exp:{}][auc/best:{:.4f}/{:.4f}][tr_l:{:.2f}][te_l:{:.2f}][va_l:{:.2f}]"
+                    # if opt['print_option_1'] == True:
+                    #     tqdm_.set_description("random_key[{}][e:{}][last:{}][exp:{}][auc/best:{:.4f}/{:.4f}][tr_l:{:.2f}][te_l:{:.2f}][va_l:{:.2f}]"
+                    #                      .format(random_key, epoch, last_saved_epoch, tests,current_auc['test'],\
+                    #                              best_auc, current_loss['train'],current_loss['test'],current_loss['valid']))
+                    print("random_key[{}][e:{}][last:{}][exp:{}][auc/best:{:.4f}/{:.4f}][tr_l:{:.2f}][te_l:{:.2f}][va_l:{:.2f}]"
                                          .format(random_key, epoch, last_saved_epoch, tests,current_auc['test'],\
                                                  best_auc, current_loss['train'],current_loss['test'],current_loss['valid']))
-
                                             
                 test_auc_by_best_valid_auc_list.append(test_auc_by_best_valid_auc)
 

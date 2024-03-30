@@ -46,7 +46,7 @@
             "name": "usad",
             "type": "debugpy",
             "request": "launch",
-            "program": "./src/train.py",
+            "program": "./src/train_score.py",
             "console": "integratedTerminal",
             "args":["--config", "./config/vae.yml",
             "--features", "ecg_time", "--model", "usad",

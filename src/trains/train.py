@@ -119,29 +119,42 @@ def train_usad(epoch, model,  loader, criterion, optimizer, device, opt):
     #     optimizer.step()
     # current_loss = current_loss/len(loader.dataset)
 
+    import tqdm
 
-    current_loss = 0
+    
     optimizer1 = torch.optim.Adam(list(model.encoder.parameters())+list(model.decoder1.parameters()))
     optimizer2 = torch.optim.Adam(list(model.encoder.parameters())+list(model.decoder2.parameters()))
-    # for epoch in range(epochs):
-    for idx, (inputs, ehr, target, caseid) in enumerate(loader):
-        inputs, target, ehr = inputs.to(device), target.to(device), ehr.to(device)
+    tqdm_ = tqdm.tqdm(range(30))
+    all1 = 0
+    all2 = 0
+    for epoch in range(3):
+        current_loss = 0
+        loss2_ = 0
+        for idx, (inputs, ehr, target, caseid) in enumerate(loader):
+            inputs, target, ehr = inputs.to(device), target.to(device), ehr.to(device)
 
-        
-        #Train AE1
-        loss1,loss2 = model.training_step(inputs,epoch+1)
-        loss1.backward()
-        optimizer1.step()
-        optimizer1.zero_grad()
-        
-        
-        #Train AE2
-        loss1,loss2 = model.training_step(inputs,epoch+1)
-        loss2.backward()
-        optimizer2.step()
-        optimizer2.zero_grad()
+            
+            #Train AE1
+            loss1,loss2 = model.training_step(inputs,epoch+1)
+            loss1.backward()
+            optimizer1.step()
+            optimizer1.zero_grad()
+            
+            
+            #Train AE2
+            loss1,loss2 = model.training_step(inputs,epoch+1)
+            loss2.backward()
+            optimizer2.step()
+            optimizer2.zero_grad()
 
-        current_loss += loss1.item()*inputs.size(0)
+            current_loss += loss1.item()*inputs.size(0)
+            loss2_ += loss2.item()*inputs.size(0)
+            # tqdm_.set_description("[l:{:.4f}][{:.4f}]//[{:.4f}][{:.4f}]"
+            #                     .format(current_loss, loss2_,all1, all2))
+        print("[l:{:.4f}][{:.4f}]//[{:.4f}][{:.4f}]"
+                            .format(current_loss, loss2_,all1, all2))
+        all1 = current_loss
+        all2 = loss2_
 
     return current_loss 
 
